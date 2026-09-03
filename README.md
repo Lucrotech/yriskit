@@ -23,18 +23,24 @@ Use **Workers Builds**, not Cloudflare Pages static deploy. In the Worker build 
 
 | Setting | Value |
 | --- | --- |
-| **Build command** | `npm run cf:build` |
-| **Deploy command** | `npm run cf:deploy` |
+| **Build command** | `npm run deploy:cf` |
+| **Deploy command** | `echo deploy-complete` |
 
-Do **not** set the build command to `npm run build` alone — that only runs Next.js. Do **not** set the deploy command to `npx wrangler deploy`.
+**Alternative (two-step):** build `npm run cf:build`, deploy `npm run cf:deploy`.
+
+Do **not** set the build command to `npm run build` alone — that only runs Next.js. Do **not** use `opennextjs-cloudflare deploy` as the deploy command; it can hang on cache upload. `cf:deploy` runs `wrangler deploy` directly after OpenNext has built `.open-next/`.
 
 `npm run build` must stay as `next build --webpack` because OpenNext invokes it internally. Setting it to `opennextjs-cloudflare build` causes a recursive loop and the deployment will hang.
 
 1. Create a GitHub repo and push this project.
 2. In Cloudflare: Workers & Pages → your worker → Settings → Builds → connect GitHub.
-3. Create a D1 database `yriskit` and R2 buckets `yriskit-documents` and `yriskit-opennext-cache`. Put the D1 ID in `wrangler.toml` (`database_id`).
+3. Create a D1 database `yriskit` and R2 bucket `yriskit-documents`. Uncomment the `[[d1_databases]]` block in `wrangler.toml` and put the D1 ID in `database_id` when ready for production DB.
 4. Set build/deploy commands from the table above.
-5. Set secrets in **Build variables and secrets**: `BETTER_AUTH_SECRET`, `IKHOKHA_APP_ID`, `IKHOKHA_APP_SECRET`, `IKHOKHA_ENTITY_ID`, `RESEND_API_KEY`, `CRON_SECRET`, `ADMIN_EMAIL`. Set `NEXT_PUBLIC_APP_URL` and `NEXT_PUBLIC_SITE_URL` to `https://yriskit.co.za`.
+5. Set secrets in **Build variables and secrets** (required for a successful build):
+   - `BETTER_AUTH_SECRET` — any long random string
+   - `NEXT_PUBLIC_APP_URL=https://yriskit.co.za`
+   - `NEXT_PUBLIC_SITE_URL=https://yriskit.co.za`
+   - Optional: `IKHOKHA_*`, `RESEND_API_KEY`, `CRON_SECRET`, `ADMIN_EMAIL`, `DEMO_CLIENT_PASSWORD`
 6. Point `yriskit.co.za` at the Worker when you cut over.
 
 Without iKhokha credentials the app still runs using the mock checkout.

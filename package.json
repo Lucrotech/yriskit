@@ -10,8 +10,9 @@
     "lint": "eslint",
     "cf:build": "opennextjs-cloudflare build",
     "cf:preview": "opennextjs-cloudflare preview",
-    "cf:deploy": "opennextjs-cloudflare deploy",
-    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "cf:deploy": "node scripts/cf-deploy.mjs",
+    "deploy:cf": "opennextjs-cloudflare build && node scripts/cf-deploy.mjs",
+    "deploy": "npm run deploy:cf",
     "seed:demo": "npx tsx --env-file=.env.local scripts/seed-demo.ts"
   },
   "dependencies": {

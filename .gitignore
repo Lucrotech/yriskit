@@ -39,6 +39,7 @@ yarn-error.log*
 /data/yriskit.db-*
 /storage/rmcps
 /open-next.config.ts.bak
+/.open-next
 
 # vercel
 .vercel

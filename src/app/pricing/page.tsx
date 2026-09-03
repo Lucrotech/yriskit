@@ -12,6 +12,8 @@ export const metadata = pageMetadata({
   path: "/pricing",
 });
 
+export const dynamic = "force-dynamic";
+
 export default async function PricingPage({
   searchParams,
 }: {

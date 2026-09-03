@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
+import { connection } from "next/server";
 import { Libre_Baskerville, Source_Sans_3 } from "next/font/google";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { ensureSeed } from "@/db/seed";
 import { getSession } from "@/lib/session";
 import { isAdminEmail } from "@/lib/auth";
 import {
@@ -76,8 +76,10 @@ export const metadata: Metadata = {
   },
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function RootLayout({ children }: LayoutProps<"/">) {
-  await ensureSeed();
+  await connection();
   const session = await getSession();
   const admin = Boolean(
     session?.user &&
