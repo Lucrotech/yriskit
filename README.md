@@ -17,15 +17,25 @@ Open http://localhost:3000
 - The email in `ADMIN_EMAIL` is promoted to admin on signup (`hello@yriskit.co.za` by default).
 - `npm run seed:demo` creates a paid demo client (`client@yriskit.co.za`) with the questionnaire prefilled. Set `DEMO_CLIENT_PASSWORD` in `.env.local`. While signed in as that user, use **Re-run demo** on the dashboard to reset the wizard and downloads without leaving the app.
 
-## Cloudflare Pages (GitHub)
+## Cloudflare Workers Builds (GitHub)
+
+Use **Workers Builds**, not Cloudflare Pages static deploy. In the Worker build settings:
+
+| Setting | Value |
+| --- | --- |
+| **Build command** | `npm run cf:build` |
+| **Deploy command** | `npm run cf:deploy` |
+
+Do **not** set the build command to `npm run build` alone — that only runs Next.js. Do **not** set the deploy command to `npx wrangler deploy`.
+
+`npm run build` must stay as `next build --webpack` because OpenNext invokes it internally. Setting it to `opennextjs-cloudflare build` causes a recursive loop and the deployment will hang.
 
 1. Create a GitHub repo and push this project.
-2. In Cloudflare: Pages → Connect GitHub → this repo.
-3. Create a D1 database `yriskit` and an R2 bucket `yriskit-documents`. Put the IDs in `wrangler.toml`.
-4. **Build command:** `npm run build` (runs OpenNext for Cloudflare).
-5. **Deploy command:** `npm run cf:deploy` (do not use plain `npx wrangler deploy` unless the OpenNext build has already completed).
-6. Set secrets: `BETTER_AUTH_SECRET`, `IKHOKHA_APP_ID`, `IKHOKHA_APP_SECRET`, `IKHOKHA_ENTITY_ID`, `RESEND_API_KEY`, `CRON_SECRET`, `ADMIN_EMAIL`. Set `NEXT_PUBLIC_APP_URL` and `NEXT_PUBLIC_SITE_URL` to `https://yriskit.co.za` in production.
-7. Point `yriskit.co.za` at the Pages project when you cut over. Keep the Tally form live until the first paid generation is verified.
+2. In Cloudflare: Workers & Pages → your worker → Settings → Builds → connect GitHub.
+3. Create a D1 database `yriskit` and R2 buckets `yriskit-documents` and `yriskit-opennext-cache`. Put the D1 ID in `wrangler.toml` (`database_id`).
+4. Set build/deploy commands from the table above.
+5. Set secrets in **Build variables and secrets**: `BETTER_AUTH_SECRET`, `IKHOKHA_APP_ID`, `IKHOKHA_APP_SECRET`, `IKHOKHA_ENTITY_ID`, `RESEND_API_KEY`, `CRON_SECRET`, `ADMIN_EMAIL`. Set `NEXT_PUBLIC_APP_URL` and `NEXT_PUBLIC_SITE_URL` to `https://yriskit.co.za`.
+6. Point `yriskit.co.za` at the Worker when you cut over.
 
 Without iKhokha credentials the app still runs using the mock checkout.
 
