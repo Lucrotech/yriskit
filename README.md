@@ -23,8 +23,10 @@ Use **Workers Builds**, not Cloudflare Pages static deploy. In the Worker build 
 
 | Setting | Value |
 | --- | --- |
-| **Build command** | `npm run deploy:cf` |
+| **Build command** | `npm run deploy` |
 | **Deploy command** | `echo deploy-complete` |
+
+(`npm run deploy:cf` is equivalent.)
 
 **Alternative (two-step):** build `npm run cf:build`, deploy `npm run cf:deploy`.
 

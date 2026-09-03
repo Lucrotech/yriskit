@@ -2,6 +2,12 @@
   "name": "yriskit",
   "version": "0.1.0",
   "private": true,
+  "allowScripts": {
+    "better-sqlite3": true,
+    "esbuild": true,
+    "unrs-resolver": true,
+    "workerd": true
+  },
   "scripts": {
     "dev": "next dev --webpack",
     "build": "next build --webpack",
