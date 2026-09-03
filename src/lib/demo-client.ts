@@ -4,6 +4,8 @@ import { organizations, orders, products, submissions, user } from "@/db/schema"
 import { fulfillOrder } from "@/lib/fulfill";
 import { id } from "@/lib/utils";
 
+type Order = typeof orders.$inferSelect;
+
 export const DEMO_CLIENT_EMAIL = process.env.DEMO_CLIENT_EMAIL || "client@yriskit.co.za";
 export const DEMO_CLIENT_NAME = "Demo Client";
 
@@ -96,7 +98,7 @@ export function seedDemoPurchase(userId: string) {
       .run();
   }
 
-  let order = db.select().from(orders).where(eq(orders.userId, userId)).all()[0];
+  let order: Order | undefined = db.select().from(orders).where(eq(orders.userId, userId)).all()[0];
   if (!order) {
     const orderId = id("ord");
     db.insert(orders)
@@ -113,6 +115,9 @@ export function seedDemoPurchase(userId: string) {
       .run();
     fulfillOrder(orderId);
     order = db.select().from(orders).where(eq(orders.id, orderId)).get();
+    if (!order) {
+      throw new Error("Demo order could not be created.");
+    }
   } else if (order.status !== "paid") {
     fulfillOrder(order.id);
   }
@@ -142,7 +147,7 @@ export function seedDemoPurchase(userId: string) {
       userId,
       organizationId: org.id,
       productId: product.id,
-      orderId: order?.id,
+      orderId: order.id,
       answersJson,
       status: "paid",
       createdAt: now,
