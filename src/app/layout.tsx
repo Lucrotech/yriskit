@@ -5,6 +5,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { getSession } from "@/lib/session";
 import { isAdminEmail } from "@/lib/auth";
+import { hasDatabase } from "@/db/runtime";
 import {
   DEFAULT_DESCRIPTION,
   DEFAULT_KEYWORDS,
@@ -80,7 +81,9 @@ export const dynamic = "force-dynamic";
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   await connection();
-  const session = await getSession();
+  const session = hasDatabase()
+    ? await getSession().catch(() => null)
+    : null;
   const admin = Boolean(
     session?.user &&
       (session.user.email.toLowerCase() === (process.env.ADMIN_EMAIL || "hello@yriskit.co.za").toLowerCase() ||

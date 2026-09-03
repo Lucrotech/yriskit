@@ -37,14 +37,15 @@ Do **not** set the build command to `npm run build` alone — that only runs Nex
 1. Create a GitHub repo and push this project.
 2. In Cloudflare: Workers & Pages → your worker → Settings → Builds → connect GitHub.
 3. **Enable R2** in Cloudflare Dashboard → R2 Object Storage (add payment method if prompted), then create bucket `yriskit-documents`. Uncomment the `[[r2_buckets]]` block in `wrangler.toml` and redeploy.
-4. Create a D1 database `yriskit` when ready for production DB. Uncomment the `[[d1_databases]]` block in `wrangler.toml` and put the D1 ID in `database_id`.
+4. Create a D1 database `yriskit` when you need login, checkout, and document generation. Uncomment the `[[d1_databases]]` block in `wrangler.toml`, put the D1 ID in `database_id`, apply `scripts/d1-schema.sql`, then redeploy. The marketing site works without D1; the app features do not.
 5. Set build/deploy commands from the table above.
 6. Set secrets in **Build variables and secrets** (required for a successful build):
    - `BETTER_AUTH_SECRET` — any long random string
    - `NEXT_PUBLIC_APP_URL=https://yriskit.co.za`
    - `NEXT_PUBLIC_SITE_URL=https://yriskit.co.za`
    - Optional: `IKHOKHA_*`, `RESEND_API_KEY`, `CRON_SECRET`, `ADMIN_EMAIL`, `DEMO_CLIENT_PASSWORD`
-7. Point `yriskit.co.za` at the Worker when you cut over.
+7. Also add `BETTER_AUTH_SECRET` under the Worker **Settings → Variables and secrets** (runtime), not just build variables — auth needs it on every request once D1 is enabled.
+8. Point `yriskit.co.za` at the Worker when you cut over.
 
 Without iKhokha credentials the app still runs using the mock checkout.
 

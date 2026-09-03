@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { db } from "@/db";
+import { hasDatabase } from "@/db/runtime";
 import { products } from "@/db/schema";
+import { PRODUCT_CATALOGUE } from "@/lib/catalogue";
 import { formatRand } from "@/lib/utils";
 import { pageMetadata } from "@/lib/seo";
 import { eq } from "drizzle-orm";
@@ -14,18 +16,44 @@ export const metadata = pageMetadata({
 
 export const dynamic = "force-dynamic";
 
+type PricingItem = {
+  id: string;
+  slug: string;
+  name: string;
+  vertical: string;
+  description: string;
+  oneOffPriceCents: number;
+  annualPriceCents: number;
+  sortOrder: number;
+};
+
+function catalogueItems(): PricingItem[] {
+  return PRODUCT_CATALOGUE.map((item) => ({
+    id: item.slug,
+    slug: item.slug,
+    name: item.name,
+    vertical: item.vertical,
+    description: item.description,
+    oneOffPriceCents: item.oneOffPriceCents,
+    annualPriceCents: item.annualPriceCents,
+    sortOrder: item.sortOrder,
+  }));
+}
+
 export default async function PricingPage({
   searchParams,
 }: {
   searchParams: Promise<{ product?: string }>;
 }) {
   const { product: selected } = await searchParams;
-  const items = db
-    .select()
-    .from(products)
-    .where(eq(products.isActive, true))
-    .all()
-    .sort((a, b) => a.sortOrder - b.sortOrder);
+  const items: PricingItem[] = hasDatabase()
+    ? db
+        .select()
+        .from(products)
+        .where(eq(products.isActive, true))
+        .all()
+        .sort((a, b) => a.sortOrder - b.sortOrder)
+    : catalogueItems();
 
   return (
     <main className="mx-auto max-w-6xl px-6 py-16">

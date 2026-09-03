@@ -3,10 +3,15 @@ import path from "node:path";
 import Database from "better-sqlite3";
 import { drizzle } from "drizzle-orm/better-sqlite3";
 import * as schema from "./schema";
+import { hasDatabase } from "./runtime";
 
 const globalForDb = globalThis as unknown as {
   sqlite?: Database.Database;
 };
+
+type Db = ReturnType<typeof drizzle>;
+
+let cached: Db | undefined;
 
 function sqlitePath() {
   return process.env.SQLITE_PATH || path.join(process.cwd(), "data", "yriskit.db");
@@ -160,5 +165,27 @@ function applySchema(sqlite: Database.Database) {
   }
 }
 
-export const db = drizzle(openSqlite(), { schema });
+function createDb(): Db {
+  if (!hasDatabase()) {
+    throw new Error("Database is not configured for this environment.");
+  }
+  return drizzle(openSqlite(), { schema });
+}
+
+export function getDb(): Db {
+  if (!cached) cached = createDb();
+  return cached;
+}
+
+export const db = new Proxy({} as Db, {
+  get(_target, prop, receiver) {
+    const real = getDb();
+    const value = Reflect.get(real as object, prop, receiver);
+    if (typeof value === "function") {
+      return value.bind(real);
+    }
+    return value;
+  },
+});
+
 export { schema };
