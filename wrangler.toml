@@ -17,9 +17,10 @@ service = "yriskit"
 # database_name = "yriskit"
 # database_id = "YOUR_D1_DATABASE_ID"
 
-[[r2_buckets]]
-binding = "R2"
-bucket_name = "yriskit-documents"
+# Uncomment after enabling R2 and creating the bucket in Cloudflare Dashboard.
+# [[r2_buckets]]
+# binding = "R2"
+# bucket_name = "yriskit-documents"
 
 [images]
 binding = "IMAGES"
