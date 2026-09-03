@@ -1,0 +1,19 @@
+name = "yriskit"
+compatibility_date = "2026-04-01"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = ".open-next"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "yriskit"
+database_id = "REPLACE_WITH_D1_ID"
+
+[[r2_buckets]]
+binding = "R2"
+bucket_name = "yriskit-documents"
+
+[vars]
+NEXT_PUBLIC_APP_URL = "https://yriskit.co.za"
+
+[triggers]
+crons = ["0 6 * * *"]

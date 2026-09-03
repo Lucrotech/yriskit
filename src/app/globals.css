@@ -1,0 +1,95 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-navy: #0e1b33;
+  --color-navy-2: #173154;
+  --color-gold: #c9a227;
+  --color-gold-dark: #9a7a1c;
+  --color-cream: #f4efe4;
+  --color-paper: #fbfaf7;
+  --color-ink: #1c1917;
+  --font-sans: var(--font-sans);
+  --font-serif: var(--font-serif);
+}
+
+html,
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-navy);
+  color: var(--color-gold);
+  padding: 0.85rem 1.4rem;
+  font-size: 0.875rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-weight: 600;
+  border-radius: 2px;
+}
+
+.btn-primary:hover {
+  background: var(--color-navy-2);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid color-mix(in srgb, var(--color-navy) 25%, transparent);
+  color: var(--color-navy);
+  padding: 0.85rem 1.4rem;
+  font-size: 0.875rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-weight: 600;
+  border-radius: 2px;
+  background: white;
+}
+
+.btn-secondary:hover {
+  border-color: var(--color-navy);
+}
+
+.input {
+  width: 100%;
+  border: 1px solid #d6d3d1;
+  background: white;
+  padding: 0.7rem 0.85rem;
+  font-size: 0.95rem;
+  color: var(--color-ink);
+  border-radius: 2px;
+}
+
+.input:focus {
+  outline: 2px solid var(--color-gold);
+  border-color: var(--color-navy);
+}
+
+.label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-navy);
+  margin-bottom: 0.4rem;
+}
+
+.prose-legal h1,
+.prose-legal h2 {
+  font-family: var(--font-serif);
+  color: var(--color-navy);
+}
+
+.eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-gold-dark);
+  font-weight: 600;
+}
