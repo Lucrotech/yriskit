@@ -1,15 +1,17 @@
 import fs from "node:fs";
 import path from "node:path";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import Database from "better-sqlite3";
-import { drizzle } from "drizzle-orm/better-sqlite3";
+import { drizzle as drizzleSqlite } from "drizzle-orm/better-sqlite3";
+import { drizzle as drizzleD1 } from "drizzle-orm/d1";
 import * as schema from "./schema";
-import { hasDatabase } from "./runtime";
+import { hasDatabase, isCloudflareWorker } from "./runtime";
 
 const globalForDb = globalThis as unknown as {
   sqlite?: Database.Database;
 };
 
-type Db = ReturnType<typeof drizzle>;
+type Db = ReturnType<typeof drizzleSqlite>;
 
 let cached: Db | undefined;
 
@@ -169,7 +171,11 @@ function createDb(): Db {
   if (!hasDatabase()) {
     throw new Error("Database is not configured for this environment.");
   }
-  return drizzle(openSqlite(), { schema });
+  if (isCloudflareWorker()) {
+    const { env } = getCloudflareContext();
+    return drizzleD1(env.DB!, { schema }) as unknown as Db;
+  }
+  return drizzleSqlite(openSqlite(), { schema });
 }
 
 export function getDb(): Db {

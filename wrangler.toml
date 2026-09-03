@@ -11,11 +11,10 @@ binding = "ASSETS"
 binding = "WORKER_SELF_REFERENCE"
 service = "yriskit"
 
-# Uncomment after creating the D1 database and replacing the ID.
-# [[d1_databases]]
-# binding = "DB"
-# database_name = "yriskit"
-# database_id = "YOUR_D1_DATABASE_ID"
+[[d1_databases]]
+binding = "DB"
+database_name = "yriskit"
+database_id = "3f720f7e-609a-402c-90e9-9f49e9b88215"
 
 # Uncomment after enabling R2 and creating the bucket in Cloudflare Dashboard.
 # [[r2_buckets]]

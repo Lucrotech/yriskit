@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { db } from "@/db";
-import { hasDatabase } from "@/db/runtime";
+import { hasDatabase, isCloudflareWorker } from "@/db/runtime";
 import { products } from "@/db/schema";
 import { PRODUCT_CATALOGUE } from "@/lib/catalogue";
 import { formatRand } from "@/lib/utils";
@@ -46,14 +46,20 @@ export default async function PricingPage({
   searchParams: Promise<{ product?: string }>;
 }) {
   const { product: selected } = await searchParams;
-  const items: PricingItem[] = hasDatabase()
-    ? db
-        .select()
-        .from(products)
-        .where(eq(products.isActive, true))
-        .all()
-        .sort((a, b) => a.sortOrder - b.sortOrder)
-    : catalogueItems();
+  const items: PricingItem[] = !hasDatabase()
+    ? catalogueItems()
+    : isCloudflareWorker()
+      ? (await db
+          .select()
+          .from(products)
+          .where(eq(products.isActive, true)))
+          .sort((a, b) => a.sortOrder - b.sortOrder)
+      : db
+          .select()
+          .from(products)
+          .where(eq(products.isActive, true))
+          .all()
+          .sort((a, b) => a.sortOrder - b.sortOrder);
 
   return (
     <main className="mx-auto max-w-6xl px-6 py-16">
