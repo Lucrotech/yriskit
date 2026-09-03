@@ -1,4 +1,12 @@
 import Link from "next/link";
+import { pageMetadata } from "@/lib/seo";
+
+export const metadata = pageMetadata({
+  title: "How it works",
+  description:
+    "See how Y Risk It turns FIC Act section 42 into a documented RMCP: choose a programme, pay with iKhokha, complete the wizard, and download Word and PDF files.",
+  path: "/how-it-works",
+});
 
 const steps = [
   {

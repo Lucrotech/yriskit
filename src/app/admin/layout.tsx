@@ -1,6 +1,10 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { SignOutButton } from "@/components/sign-out-button";
 import { requireAdmin } from "@/lib/session";
+import { PRIVATE_METADATA } from "@/lib/seo";
+
+export const metadata: Metadata = PRIVATE_METADATA;
 
 const links = [
   { href: "/admin", label: "Overview" },

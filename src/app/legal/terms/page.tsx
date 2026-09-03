@@ -1,10 +1,13 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { LegalShell } from "@/components/legal-shell";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Terms of use",
-};
+  description:
+    "Terms of use for the Y Risk It website and RMCP platform, including access, payment, document licence and acceptable use.",
+  path: "/legal/terms",
+});
 
 export default function TermsPage() {
   return (

@@ -1,5 +1,14 @@
 import Link from "next/link";
 import { BrandDiamond } from "@/components/logo";
+import { JsonLd } from "@/components/json-ld";
+import { organizationJsonLd, pageMetadata, serviceJsonLd, webSiteJsonLd } from "@/lib/seo";
+
+export const metadata = pageMetadata({
+  title: "RMCP Compliance for Accountable Institutions",
+  description:
+    "Produce a board-ready Risk Management and Compliance Programme under the FIC Act. Locked legal wording, industry-specific controls, and immediate Word and PDF downloads.",
+  path: "/",
+});
 
 const pillars = [
   {
@@ -30,6 +39,18 @@ const sectors = [
 export default function HomePage() {
   return (
     <main>
+      <JsonLd
+        data={[
+          organizationJsonLd(),
+          webSiteJsonLd(),
+          serviceJsonLd({
+            name: "RMCP document generation",
+            description:
+              "Online Risk Management and Compliance Programme drafting for South African accountable institutions.",
+            path: "/",
+          }),
+        ]}
+      />
       <section className="bg-navy text-cream">
         <div className="mx-auto grid max-w-6xl gap-12 px-6 py-20 md:grid-cols-2 md:py-28">
           <div>

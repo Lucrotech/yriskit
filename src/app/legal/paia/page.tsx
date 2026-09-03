@@ -1,10 +1,13 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { LegalShell, PdfLink } from "@/components/legal-shell";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "PAIA manual",
-};
+  description:
+    "Promotion of Access to Information Act manual for Y Risk It (Pty) Ltd, including how to request records held by the company.",
+  path: "/legal/paia",
+});
 
 export default function PaiaPage() {
   return (

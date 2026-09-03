@@ -1,6 +1,24 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { industries } from "../page";
+import { industries } from "@/lib/industries";
+import { pageMetadata, serviceJsonLd } from "@/lib/seo";
+import { JsonLd } from "@/components/json-ld";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const item = industries.find((entry) => entry.slug === slug);
+  if (!item) return {};
+  return pageMetadata({
+    title: `${item.title} RMCP`,
+    description: `${item.summary} ${item.body}`,
+    path: `/industries/${slug}`,
+  });
+}
 
 export default async function IndustryPage({
   params,
@@ -13,6 +31,13 @@ export default async function IndustryPage({
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-16">
+      <JsonLd
+        data={serviceJsonLd({
+          name: `${item.title} RMCP`,
+          description: item.body,
+          path: `/industries/${slug}`,
+        })}
+      />
       <p className="eyebrow">Industry RMCP</p>
       <h1 className="mt-3 font-serif text-4xl text-navy">{item.title}</h1>
       <p className="mt-6 text-lg leading-8 text-ink/70">{item.body}</p>

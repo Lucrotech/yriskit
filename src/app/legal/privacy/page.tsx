@@ -1,10 +1,13 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { LegalShell } from "@/components/legal-shell";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Privacy statement",
-};
+  description:
+    "Privacy statement for Y Risk It (Pty) Ltd, including how personal information is collected and processed on the RMCP platform under POPIA.",
+  path: "/legal/privacy",
+});
 
 export default function PrivacyPage() {
   return (

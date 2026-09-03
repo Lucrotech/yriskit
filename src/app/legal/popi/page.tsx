@@ -1,10 +1,13 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { LegalShell } from "@/components/legal-shell";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "POPI manual",
-};
+  description:
+    "POPIA information manual for Y Risk It (Pty) Ltd describing personal information processed on the RMCP platform.",
+  path: "/legal/popi",
+});
 
 export default function PopiPage() {
   return (

@@ -1,5 +1,13 @@
 import { Suspense } from "react";
 import { LoginForm } from "@/components/login-form";
+import { pageMetadata } from "@/lib/seo";
+
+export const metadata = pageMetadata({
+  title: "Sign in",
+  description: "Sign in to your Y Risk It workspace to continue your RMCP questionnaire or download documents.",
+  path: "/login",
+  noIndex: true,
+});
 
 export default function LoginPage() {
   return (

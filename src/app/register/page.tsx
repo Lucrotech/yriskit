@@ -1,6 +1,15 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import { RegisterForm } from "@/components/register-form";
+import { pageMetadata } from "@/lib/seo";
+
+export const metadata = pageMetadata({
+  title: "Create account",
+  description:
+    "Create a Y Risk It account, choose an RMCP programme and pay to unlock the guided FIC Act questionnaire.",
+  path: "/register",
+  noIndex: true,
+});
 
 export default function RegisterPage() {
   return (

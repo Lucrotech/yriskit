@@ -1,4 +1,12 @@
 import { ContactForm } from "@/components/contact-form";
+import { pageMetadata } from "@/lib/seo";
+
+export const metadata = pageMetadata({
+  title: "Contact",
+  description:
+    "Contact Y Risk It about RMCP programmes, renewals, industry wording and accountable institution compliance under the FIC Act.",
+  path: "/contact",
+});
 
 export default function ContactPage() {
   return (

@@ -1,9 +1,12 @@
-import type { Metadata } from "next";
 import { LegalShell, PdfLink } from "@/components/legal-shell";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Refund and cancellation policy",
-};
+  description:
+    "Refund and cancellation policy for Y Risk It RMCP platform access, renewals and digital product purchases.",
+  path: "/legal/refund",
+});
 
 export default function RefundPage() {
   return (

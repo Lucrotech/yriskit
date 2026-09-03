@@ -2,7 +2,15 @@ import Link from "next/link";
 import { db } from "@/db";
 import { products } from "@/db/schema";
 import { formatRand } from "@/lib/utils";
+import { pageMetadata } from "@/lib/seo";
 import { eq } from "drizzle-orm";
+
+export const metadata = pageMetadata({
+  title: "Pricing",
+  description:
+    "RMCP programme pricing for South African accountable institutions. Pay once to generate your document, with optional annual support for renewal reminders and regeneration.",
+  path: "/pricing",
+});
 
 export default async function PricingPage({
   searchParams,
