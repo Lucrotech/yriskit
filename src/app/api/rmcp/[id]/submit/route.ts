@@ -8,8 +8,10 @@ import { generatePdf } from "@/lib/rmcp/generate-pdf";
 import { putFile } from "@/lib/storage";
 import { addMonths } from "@/lib/utils";
 
+export const maxDuration = 60;
+
 export async function POST(
-  _request: Request,
+  request: Request,
   context: { params: Promise<{ id: string }> },
 ) {
   const session = await getSession();
@@ -22,13 +24,30 @@ export async function POST(
     .get();
   if (!sub) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  const answers = JSON.parse(sub.answersJson || "{}") as Record<string, unknown>;
+  const body = (await request.json().catch(() => ({}))) as {
+    answers?: Record<string, unknown>;
+  };
+  const answers = {
+    ...(JSON.parse(sub.answersJson || "{}") as Record<string, unknown>),
+    ...(body.answers || {}),
+  };
+
   if (answers.DECLARATION !== "Yes") {
     return NextResponse.json(
       { error: "Please confirm the declaration on the last step." },
       { status: 400 },
     );
   }
+
+  const now = new Date();
+  db.update(submissions)
+    .set({
+      answersJson: JSON.stringify(answers),
+      status: "in_progress",
+      updatedAt: now,
+    })
+    .where(eq(submissions.id, id))
+    .run();
 
   const product = db.select().from(products).where(eq(products.id, sub.productId)).get();
   const clauses = db
@@ -38,14 +57,17 @@ export async function POST(
     .all();
   answers.VERTICAL_CLAUSES = clauses.map((c) => `${c.title}\n${c.body}`).join("\n\n");
 
-  const now = new Date();
   try {
-    const docx = generateDocx(answers, now);
-    const pdf = await generatePdf(answers, now);
+    const [docx, pdf] = await Promise.all([
+      generateDocx(answers, now),
+      generatePdf(answers, now),
+    ]);
     const docxKey = `rmcps/${id}.docx`;
     const pdfKey = `rmcps/${id}.pdf`;
-    await putFile(docxKey, docx, "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-    await putFile(pdfKey, pdf, "application/pdf");
+    await Promise.all([
+      putFile(docxKey, docx, "application/vnd.openxmlformats-officedocument.wordprocessingml.document"),
+      putFile(pdfKey, pdf, "application/pdf"),
+    ]);
 
     const months = product?.renewalMonths || 12;
     db.update(submissions)

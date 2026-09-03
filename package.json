@@ -9,11 +9,13 @@
     "lint": "eslint",
     "cf:build": "opennextjs-cloudflare build",
     "cf:preview": "opennextjs-cloudflare preview",
-    "cf:deploy": "opennextjs-cloudflare deploy"
+    "cf:deploy": "opennextjs-cloudflare deploy",
+    "seed:demo": "npx tsx --env-file=.env.local scripts/seed-demo.ts"
   },
   "dependencies": {
     "better-auth": "^1.7.2",
     "better-sqlite3": "^12.11.1",
+    "docx": "^9.7.1",
     "docxtemplater": "^3.69.3",
     "drizzle-orm": "^0.45.2",
     "lucide-react": "^1.39.0",

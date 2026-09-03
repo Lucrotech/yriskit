@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { authClient } from "@/lib/auth-client";
+import { SignOutButton } from "@/components/sign-out-button";
 
 export function ProfileForm({
   name,
@@ -50,21 +50,7 @@ export function ProfileForm({
       {message ? <p className="text-sm text-navy">{message}</p> : null}
       <div className="flex gap-3">
         <button className="btn-primary">Save</button>
-        <button
-          type="button"
-          className="btn-secondary"
-          onClick={() =>
-            authClient.signOut({
-              fetchOptions: {
-                onSuccess: () => {
-                  window.location.href = "/";
-                },
-              },
-            })
-          }
-        >
-          Sign out
-        </button>
+        <SignOutButton className="btn-secondary">Sign out</SignOutButton>
       </div>
     </form>
   );

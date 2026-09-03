@@ -41,7 +41,7 @@ const answers = {
 };
 
 async function main() {
-  const docx = generateDocx(answers);
+  const docx = await generateDocx(answers);
   fs.mkdirSync("storage/rmcps", { recursive: true });
   fs.writeFileSync("storage/rmcps/sample.docx", docx);
   console.log("docx", docx.length);

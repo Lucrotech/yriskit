@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Logo } from "./logo";
+import { SignOutButton } from "./sign-out-button";
 
 const links = [
   { href: "/how-it-works", label: "How it works" },
@@ -38,6 +39,7 @@ export function SiteHeader({
               <Link href="/app" className="btn-secondary !py-2 !px-4">
                 Dashboard
               </Link>
+              <SignOutButton />
             </>
           ) : (
             <>

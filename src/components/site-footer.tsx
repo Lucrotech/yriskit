@@ -57,7 +57,7 @@ export function SiteFooter() {
         </div>
       </div>
       <div className="border-t border-white/10 py-4 text-center text-xs text-cream/50">
-        © {new Date().getFullYear()} Y Risk It (Pty) Ltd · Aligned to FIC Act s42 and Guidance Note 7A
+        © {new Date().getFullYear()} Y Risk It (Pty) Ltd
       </div>
     </footer>
   );

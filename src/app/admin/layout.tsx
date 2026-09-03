@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SignOutButton } from "@/components/sign-out-button";
 import { requireAdmin } from "@/lib/session";
 
 const links = [
@@ -26,6 +27,7 @@ export default async function AdminLayout({
               {link.label}
             </Link>
           ))}
+          <SignOutButton className="mt-6 block text-left text-ink/70 hover:text-navy hover:underline" />
         </nav>
       </aside>
       <div className="min-w-0 flex-1">{children}</div>

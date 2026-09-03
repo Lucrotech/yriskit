@@ -15,6 +15,7 @@ Open http://localhost:3000
 - Create an account, purchase an RMCP (without iKhokha keys this uses a **mock payment** that marks the order paid).
 - Complete the wizard and download Word/PDF.
 - The email in `ADMIN_EMAIL` is promoted to admin on signup (`hello@yriskit.co.za` by default).
+- `npm run seed:demo` creates a paid demo client (`client@yriskit.co.za`) with the questionnaire prefilled. Set `DEMO_CLIENT_PASSWORD` in `.env.local`. While signed in as that user, use **Re-run demo** on the dashboard to reset the wizard and downloads without leaving the app.
 
 ## Cloudflare Pages (GitHub)
 
@@ -33,4 +34,4 @@ Without iKhokha credentials the app still runs using the mock checkout.
 
 ## Document generation
 
-`templates/rmcp-core.docx` is the official RMCP with `{{MERGE_FIELDS}}`. Legal wording is not rewritten. Vertical products add extra clause blocks (admin) that appear in the PDF.
+Word and PDF are generated from the same locked FIC Act content (`data/rmcp-paragraphs.json`) with matching cover, document control, notices, and body sections. Vertical products add extra clause blocks (admin) that appear in both formats. `templates/rmcp-core.docx` remains the source reference for field mapping.

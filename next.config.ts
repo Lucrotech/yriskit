@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  serverExternalPackages: ["better-sqlite3", "docxtemplater", "pizzip"],
+  serverExternalPackages: ["better-sqlite3", "docx", "docxtemplater", "pizzip"],
   async redirects() {
     return [
       { source: "/privacy-statement", destination: "/legal/privacy", permanent: true },

@@ -1,5 +1,3 @@
-import fs from "node:fs";
-import path from "node:path";
 import {
   PDFDocument,
   PDFFont,
@@ -7,7 +5,11 @@ import {
   StandardFonts,
   rgb,
 } from "pdf-lib";
-import { answersToMergeFields, extraAnnexurePeople, type Answers } from "./map-answers";
+import {
+  IMPORTANT_NOTICE,
+  buildRmcpDocumentContent,
+  type Answers,
+} from "./document-content";
 
 const NAVY = rgb(14 / 255, 27 / 255, 51 / 255);
 const GOLD = rgb(184 / 255, 149 / 255, 58 / 255);
@@ -23,10 +25,6 @@ function ascii(text: string) {
     .replace(/\u2022/g, "-")
     .replace(/\u00A0/g, " ")
     .replace(/[^\x09\x0A\x0D\x20-\x7E]/g, "");
-}
-
-function fillPlaceholders(text: string, fields: Record<string, string>) {
-  return text.replace(/\{\{([A-Z0-9_]+)\}\}/g, (_, key: string) => fields[key] ?? "");
 }
 
 function wrap(text: string, font: PDFFont, size: number, maxWidth: number) {
@@ -151,12 +149,11 @@ class Composer {
 }
 
 export async function generatePdf(answers: Answers, submitDate = new Date()) {
-  const fields = answersToMergeFields(answers, { submitDate });
-  const paragraphsPath = path.join(process.cwd(), "data", "rmcp-paragraphs.json");
-  const paragraphs = JSON.parse(fs.readFileSync(paragraphsPath, "utf8")) as string[];
+  const content = buildRmcpDocumentContent(answers, submitDate);
+  const { fields, companyName } = content;
 
   const doc = await PDFDocument.create();
-  doc.setTitle(`RMCP — ${fields.COMPANY_NAME}`);
+  doc.setTitle(`RMCP — ${companyName}`);
   doc.setAuthor("Y Risk It");
   doc.setSubject("Risk Management and Compliance Programme in terms of the FIC Act");
   const font = await doc.embedFont(StandardFonts.TimesRoman);
@@ -193,7 +190,7 @@ export async function generatePdf(answers: Answers, submitDate = new Date()) {
     font: bold,
     color: GOLD,
   });
-  cover.drawText(ascii(fields.COMPANY_NAME || "Accountable institution"), {
+  cover.drawText(ascii(companyName), {
     x: 56,
     y: 540,
     size: 16,
@@ -222,51 +219,35 @@ export async function generatePdf(answers: Answers, submitDate = new Date()) {
     color: GOLD,
   });
 
-  const composer = new Composer(doc, font, bold, fields.COMPANY_NAME);
+  const composer = new Composer(doc, font, bold, companyName);
   composer.heading("Document control");
-  composer.kv("Accountable institution", fields.COMPANY_NAME);
-  composer.kv("Registered address", fields.REG_ADDRESS);
-  composer.kv("CIPC registration", fields.REG_NUMBER);
-  composer.kv("goAML / FIC Org ID", fields.GOAML_FIC_REG);
-  composer.kv("FIC registration date", fields.FIC_REG_DATE);
-  composer.kv("Type(s) of accountable institution", fields.ACCOUNTABLE_INST_TYPE);
-  composer.kv("FIC compliance officer", fields.FIC_OFFICER_NAME);
-  composer.kv("POPIA information officer", fields.POPI_OFFICER);
-  composer.kv("Responsible business unit", fields.BUSINESS_UNIT);
-  composer.kv("Publishing date", fields.SUBMIT_DATE);
-  composer.kv("Review frequency", "12 months");
+  for (const { label, value } of content.documentControl) {
+    composer.kv(label, value);
+  }
 
   composer.heading("Important notice");
-  composer.paragraph(
-    "This RMCP is generated from information supplied by the accountable institution and uses Y Risk It's locked FIC Act wording. The board of directors, senior management, or person with the highest authority remains responsible for approving, implementing, monitoring and updating the programme. Generating this document does not constitute legal advice, FIC registration, or a finding that the institution is compliant.",
-  );
+  composer.paragraph(IMPORTANT_NOTICE);
 
-  const vertical = String(answers.VERTICAL_CLAUSES || "").trim();
-  if (vertical) {
+  if (content.verticalBlocks.length) {
     composer.heading("Industry-specific controls");
-    for (const block of vertical.split("\n\n")) {
+    for (const block of content.verticalBlocks) {
       composer.paragraph(block);
     }
   }
 
-  const annexure = extraAnnexurePeople(answers);
-  if (annexure.length) {
+  if (content.annexure.length) {
     composer.heading("Annexure — additional responsible persons");
-    for (const line of annexure) composer.paragraph(line);
+    for (const line of content.annexure) {
+      composer.paragraph(line);
+    }
   }
 
   composer.heading("Risk Management and Compliance Programme");
-  for (const para of paragraphs) {
-    const filled = fillPlaceholders(para, fields).trim();
-    if (!filled) continue;
-    const isHeading =
-      /^(Part [IVX]+|RMCP Element|DETAILS OF|POLICY ADOPTION|TABLE OF CONTENTS|Director \d|Staff Member)/i.test(
-        filled,
-      ) || filled === filled.toUpperCase() && filled.length < 80;
-    if (isHeading && filled.length < 140) {
-      composer.heading(filled, 11);
+  for (const block of content.bodyBlocks) {
+    if (block.type === "heading") {
+      composer.heading(block.text, block.size ?? 11);
     } else {
-      composer.paragraph(filled, { size: 10 });
+      composer.paragraph(block.text, { size: block.size ?? 10 });
     }
   }
 

@@ -1,12 +1,15 @@
 import Link from "next/link";
 import { desc, eq } from "drizzle-orm";
+import { DemoResetButton } from "@/components/demo-reset-button";
 import { db } from "@/db";
 import { orders, products, submissions } from "@/db/schema";
+import { isDemoClientEmail } from "@/lib/demo-client";
 import { requireUser } from "@/lib/session";
 import { formatDate, formatRand } from "@/lib/utils";
 
 export default async function AppHome() {
   const session = await requireUser();
+  const demo = isDemoClientEmail(session.user.email);
   const myOrders = db
     .select()
     .from(orders)
@@ -33,6 +36,7 @@ export default async function AppHome() {
           <p className="mt-2 text-ink/70">{session.user.email}</p>
         </div>
         <div className="flex gap-3">
+          {demo ? <DemoResetButton /> : null}
           <Link href="/app/profile" className="btn-secondary">
             Profile
           </Link>
@@ -41,6 +45,13 @@ export default async function AppHome() {
           </Link>
         </div>
       </div>
+
+      {demo ? (
+        <p className="mt-6 border border-gold/40 bg-cream/80 px-4 py-3 text-sm text-ink/80">
+          Demo account: use <strong>Re-run demo</strong> to reset the questionnaire and
+          downloads so you can walk through the full flow again.
+        </p>
+      ) : null}
 
       <section className="mt-10">
         <h2 className="font-serif text-2xl text-navy">Your programmes</h2>

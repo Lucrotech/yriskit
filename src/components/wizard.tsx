@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
 import { FORM_STEPS, isFieldVisible, type FormField } from "@/lib/rmcp/form-schema";
 import { cn } from "@/lib/utils";
 
@@ -88,7 +87,6 @@ export function Wizard({
   submissionId: string;
   initialAnswers: Record<string, unknown>;
 }) {
-  const router = useRouter();
   const [stepIndex, setStepIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, unknown>>(initialAnswers);
   const [saving, setSaving] = useState(false);
@@ -99,35 +97,38 @@ export function Wizard({
     [step, answers],
   );
 
-  async function persist(next = answers) {
-    setSaving(true);
-    const res = await fetch(`/api/rmcp/${submissionId}/save`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ answers: next }),
-    });
-    setSaving(false);
-    if (!res.ok) throw new Error("Could not save.");
-  }
-
   async function next() {
     setError("");
+    setSaving(true);
     try {
-      await persist();
+      const saveRes = await fetch(`/api/rmcp/${submissionId}/save`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ answers }),
+      });
+      if (!saveRes.ok) throw new Error("Could not save.");
+
       if (stepIndex < FORM_STEPS.length - 1) {
         setStepIndex((i) => i + 1);
         window.scrollTo({ top: 0, behavior: "smooth" });
         return;
       }
-      const res = await fetch(`/api/rmcp/${submissionId}/submit`, { method: "POST" });
-      if (!res.ok) {
-        const body = await res.json().catch(() => ({}));
+
+      const submitRes = await fetch(`/api/rmcp/${submissionId}/submit`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ answers }),
+      });
+      if (!submitRes.ok) {
+        const body = (await submitRes.json().catch(() => ({}))) as { error?: string };
         throw new Error(body.error || "Could not generate the RMCP.");
       }
-      router.push(`/app/rmcp/${submissionId}/complete`);
-      router.refresh();
+
+      window.location.assign(`/app/rmcp/${submissionId}/complete`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong.");
+    } finally {
+      setSaving(false);
     }
   }
 
@@ -169,6 +170,12 @@ export function Wizard({
         ))}
       </div>
       {error ? <p className="mt-4 text-sm text-red-700">{error}</p> : null}
+      {saving && stepIndex === FORM_STEPS.length - 1 ? (
+        <p className="mt-4 text-sm text-ink/70">
+          Building your Word and PDF documents. This can take up to 30 seconds the first
+          time.
+        </p>
+      ) : null}
       <div className="mt-8 flex flex-wrap gap-3">
         {stepIndex > 0 ? (
           <button type="button" className="btn-secondary" onClick={() => setStepIndex((i) => i - 1)}>
