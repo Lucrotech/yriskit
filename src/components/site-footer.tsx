@@ -36,10 +36,19 @@ export function SiteFooter() {
               <Link href="/legal/disclaimer">FIC disclaimer</Link>
             </li>
             <li>
-              <Link href="/legal/privacy">Privacy &amp; POPIA</Link>
+              <Link href="/legal/privacy">Privacy statement</Link>
             </li>
             <li>
               <Link href="/legal/terms">Terms of use</Link>
+            </li>
+            <li>
+              <Link href="/legal/refund">Refund &amp; cancellation</Link>
+            </li>
+            <li>
+              <Link href="/legal/paia">PAIA manual</Link>
+            </li>
+            <li>
+              <Link href="/legal/popi">POPI manual</Link>
             </li>
             <li>
               <Link href="/contact">Contact</Link>

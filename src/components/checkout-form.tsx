@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { formatRand } from "@/lib/utils";
 
@@ -72,6 +73,17 @@ export function CheckoutForm({
       </label>
       <p className="font-serif text-3xl text-navy">{formatRand(total)}</p>
       {error ? <p className="text-sm text-red-700">{error}</p> : null}
+      <p className="text-sm text-ink/70">
+        By paying you accept the{" "}
+        <Link href="/legal/terms" className="text-navy underline">
+          terms of use
+        </Link>{" "}
+        and the{" "}
+        <Link href="/legal/refund" className="text-navy underline">
+          refund and cancellation policy
+        </Link>
+        .
+      </p>
       <button className="btn-primary" onClick={pay} disabled={pending || !selected}>
         {pending ? "Redirecting…" : "Pay with iKhokha"}
       </button>

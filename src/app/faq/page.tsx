@@ -19,6 +19,10 @@ const faqs = [
     q: "How do we pay?",
     a: "Checkout is processed by iKhokha. Card, Instant EFT and digital wallets are supported on their hosted payment page.",
   },
+  {
+    q: "Can I get a refund after I pay?",
+    a: "Platform access is a non-refundable digital product once granted. See the refund and cancellation policy. POPIA still lets you ask us to delete personal data.",
+  },
 ];
 
 export default function FaqPage() {
