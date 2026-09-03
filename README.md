@@ -22,9 +22,10 @@ Open http://localhost:3000
 1. Create a GitHub repo and push this project.
 2. In Cloudflare: Pages → Connect GitHub → this repo.
 3. Create a D1 database `yriskit` and an R2 bucket `yriskit-documents`. Put the IDs in `wrangler.toml`.
-4. Build command: `npx opennextjs-cloudflare build` (or `npm run cf:build`).
-5. Set secrets: `BETTER_AUTH_SECRET`, `IKHOKHA_APP_ID`, `IKHOKHA_APP_SECRET`, `IKHOKHA_ENTITY_ID`, `RESEND_API_KEY`, `CRON_SECRET`, `ADMIN_EMAIL`. Set `NEXT_PUBLIC_APP_URL` and `NEXT_PUBLIC_SITE_URL` to `https://yriskit.co.za` in production.
-6. Point `yriskit.co.za` at the Pages project when you cut over. Keep the Tally form live until the first paid generation is verified.
+4. **Build command:** `npm run build` (runs OpenNext for Cloudflare).
+5. **Deploy command:** `npm run cf:deploy` (do not use plain `npx wrangler deploy` unless the OpenNext build has already completed).
+6. Set secrets: `BETTER_AUTH_SECRET`, `IKHOKHA_APP_ID`, `IKHOKHA_APP_SECRET`, `IKHOKHA_ENTITY_ID`, `RESEND_API_KEY`, `CRON_SECRET`, `ADMIN_EMAIL`. Set `NEXT_PUBLIC_APP_URL` and `NEXT_PUBLIC_SITE_URL` to `https://yriskit.co.za` in production.
+7. Point `yriskit.co.za` at the Pages project when you cut over. Keep the Tally form live until the first paid generation is verified.
 
 Without iKhokha credentials the app still runs using the mock checkout.
 
