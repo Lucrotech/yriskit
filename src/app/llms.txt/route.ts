@@ -28,6 +28,7 @@ export function GET() {
     "## Contact",
     `- Email: ${CONTACT_EMAIL}`,
     `- Website: ${siteUrl()}`,
+    `- Domain: yriskit.co.za`,
     "",
     "## Preferred citation",
     `${SITE_LEGAL_NAME}, ${SITE_NAME}, ${siteUrl()}`,

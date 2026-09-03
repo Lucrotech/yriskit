@@ -10,6 +10,7 @@ import {
   DEFAULT_KEYWORDS,
   SITE_NAME,
   SITE_TAGLINE,
+  absoluteUrl,
   siteUrl,
 } from "@/lib/seo";
 import "./globals.css";
@@ -58,7 +59,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_ZA",
-    url: "/",
+    url: absoluteUrl("/"),
     siteName: SITE_NAME,
     title: `${SITE_NAME} | ${SITE_TAGLINE}`,
     description: DEFAULT_DESCRIPTION,

@@ -5,8 +5,10 @@ export const SITE_LEGAL_NAME = "Y Risk It (Pty) Ltd";
 export const SITE_TAGLINE = "RMCP Compliance for South African Accountable Institutions";
 export const CONTACT_EMAIL = "hello@yriskit.co.za";
 
+export const CANONICAL_SITE_URL = "https://yriskit.co.za";
+
 export const DEFAULT_DESCRIPTION =
-  "Risk Management and Compliance Programmes (RMCP) for South African accountable institutions under the FIC Act. Pay online, complete the guided questionnaire, and download board-ready Word and PDF documents immediately.";
+  "Risk Management and Compliance Programmes (RMCP) for South African accountable institutions under the FIC Act. Pay online at yriskit.co.za, complete the guided questionnaire, and download board-ready Word and PDF documents immediately.";
 
 export const DEFAULT_KEYWORDS = [
   "RMCP",
@@ -25,12 +27,9 @@ export const DEFAULT_KEYWORDS = [
   "POPIA",
 ];
 
+/** Canonical public origin for metadata, sitemap, robots, JSON-LD and llms.txt. */
 export function siteUrl() {
-  const url =
-    process.env.NEXT_PUBLIC_APP_URL ||
-    process.env.BETTER_AUTH_URL ||
-    "https://yriskit.co.za";
-  return url.replace(/\/$/, "");
+  return (process.env.NEXT_PUBLIC_SITE_URL || CANONICAL_SITE_URL).replace(/\/$/, "");
 }
 
 export function absoluteUrl(path = "") {
@@ -88,9 +87,11 @@ export function organizationJsonLd() {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
+    "@id": absoluteUrl("/#organization"),
     name: SITE_LEGAL_NAME,
     alternateName: SITE_NAME,
     url: siteUrl(),
+    logo: absoluteUrl("/icon.svg"),
     email: CONTACT_EMAIL,
     description: DEFAULT_DESCRIPTION,
     areaServed: {
@@ -112,12 +113,14 @@ export function webSiteJsonLd() {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
+    "@id": absoluteUrl("/#website"),
     name: SITE_NAME,
     url: siteUrl(),
     description: DEFAULT_DESCRIPTION,
     inLanguage: "en-ZA",
     publisher: {
       "@type": "Organization",
+      "@id": absoluteUrl("/#organization"),
       name: SITE_LEGAL_NAME,
       url: siteUrl(),
     },
@@ -155,6 +158,7 @@ export function serviceJsonLd({
     description,
     provider: {
       "@type": "Organization",
+      "@id": absoluteUrl("/#organization"),
       name: SITE_LEGAL_NAME,
       url: siteUrl(),
     },
