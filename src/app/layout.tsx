@@ -32,7 +32,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   const session = await getSession();
   const admin = Boolean(
     session?.user &&
-      (session.user.email.toLowerCase() === (process.env.ADMIN_EMAIL || "jackie@yriskit.co.za").toLowerCase() ||
+      (session.user.email.toLowerCase() === (process.env.ADMIN_EMAIL || "hello@yriskit.co.za").toLowerCase() ||
         isAdminEmail(session.user.email)),
   );
 

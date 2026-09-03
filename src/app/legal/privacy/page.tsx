@@ -19,7 +19,7 @@ export default function PrivacyPage() {
       </p>
       <p className="mt-4">
         You may request access, correction or deletion of your personal
-        information by emailing jackie@yriskit.co.za, subject to lawful
+        information by emailing hello@yriskit.co.za, subject to lawful
         retention for tax, FIC and dispute purposes.
       </p>
     </main>

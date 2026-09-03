@@ -1,10 +1,15 @@
 const FROM = process.env.EMAIL_FROM || "Y Risk It <noreply@yriskit.co.za>";
 
-export async function sendEmail(to: string, subject: string, html: string) {
+export async function sendEmail(
+  to: string,
+  subject: string,
+  html: string,
+  options?: { replyTo?: string },
+) {
   const key = process.env.RESEND_API_KEY;
   if (!key) {
-    console.info("[email:dev]", { to, subject });
-    return { mocked: true };
+    console.info("[email:dev]", { to, subject, replyTo: options?.replyTo });
+    return { ok: true, mocked: true };
   }
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
@@ -12,12 +17,19 @@ export async function sendEmail(to: string, subject: string, html: string) {
       Authorization: `Bearer ${key}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ from: FROM, to, subject, html }),
+    body: JSON.stringify({
+      from: FROM,
+      to,
+      subject,
+      html,
+      ...(options?.replyTo ? { reply_to: options.replyTo } : {}),
+    }),
   });
   if (!res.ok) {
     console.error("Resend error", await res.text());
+    return { ok: false, mocked: false };
   }
-  return { mocked: false };
+  return { ok: true, mocked: false };
 }
 
 export function renewalHtml(name: string, company: string, renewsOn: string, url: string) {

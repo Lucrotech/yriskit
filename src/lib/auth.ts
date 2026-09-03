@@ -5,7 +5,7 @@ import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import * as schema from "@/db/schema";
 
-const adminEmail = (process.env.ADMIN_EMAIL || "jackie@yriskit.co.za").toLowerCase();
+const adminEmail = (process.env.ADMIN_EMAIL || "hello@yriskit.co.za").toLowerCase();
 
 export const auth = betterAuth({
   secret: process.env.BETTER_AUTH_SECRET || "dev-only-change-me-in-production-32ch",

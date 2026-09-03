@@ -5,8 +5,9 @@
   --color-navy-2: #173154;
   --color-gold: #c9a227;
   --color-gold-dark: #9a7a1c;
+  --color-teal: #2f9e96;
   --color-cream: #f4efe4;
-  --color-paper: #fbfaf7;
+  --color-paper: #f7f3ea;
   --color-ink: #1c1917;
   --font-sans: var(--font-sans);
   --font-serif: var(--font-serif);
@@ -29,7 +30,7 @@ body {
   letter-spacing: 0.04em;
   text-transform: uppercase;
   font-weight: 600;
-  border-radius: 2px;
+  border-radius: 999px;
 }
 
 .btn-primary:hover {
@@ -47,7 +48,7 @@ body {
   letter-spacing: 0.04em;
   text-transform: uppercase;
   font-weight: 600;
-  border-radius: 2px;
+  border-radius: 999px;
   background: white;
 }
 
@@ -90,6 +91,6 @@ body {
   font-size: 0.72rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--color-gold-dark);
+  color: var(--color-teal);
   font-weight: 600;
 }

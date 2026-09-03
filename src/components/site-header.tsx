@@ -17,7 +17,7 @@ export function SiteHeader({
   admin?: boolean;
 }) {
   return (
-    <header className="sticky top-0 z-40 border-b border-navy/10 bg-cream/95 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b border-gold/30 bg-cream/95 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-6 py-4">
         <Logo />
         <nav className="hidden items-center gap-6 text-sm text-ink/80 md:flex">

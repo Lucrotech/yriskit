@@ -14,7 +14,7 @@ Open http://localhost:3000
 
 - Create an account, purchase an RMCP (without iKhokha keys this uses a **mock payment** that marks the order paid).
 - Complete the wizard and download Word/PDF.
-- The email in `ADMIN_EMAIL` is promoted to admin on signup (`jackie@yriskit.co.za` by default).
+- The email in `ADMIN_EMAIL` is promoted to admin on signup (`hello@yriskit.co.za` by default).
 
 ## Cloudflare Pages (GitHub)
 

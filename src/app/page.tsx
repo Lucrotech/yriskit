@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BrandDiamond } from "@/components/logo";
 
 const pillars = [
   {
@@ -32,7 +33,7 @@ export default function HomePage() {
       <section className="bg-navy text-cream">
         <div className="mx-auto grid max-w-6xl gap-12 px-6 py-20 md:grid-cols-2 md:py-28">
           <div>
-            <p className="eyebrow text-gold">Financial Intelligence Centre Act</p>
+            <p className="eyebrow !text-gold">Financial Intelligence Centre Act</p>
             <h1 className="mt-4 font-serif text-4xl leading-tight text-white md:text-5xl">
               RMCP compliance, documented with authority.
             </h1>
@@ -70,6 +71,7 @@ export default function HomePage() {
         <div className="mt-10 grid gap-6 md:grid-cols-3">
           {pillars.map((item) => (
             <article key={item.title} className="border border-navy/10 bg-white p-6">
+              <BrandDiamond className="mb-4 h-3 w-3 text-gold" />
               <h3 className="font-serif text-xl text-navy">{item.title}</h3>
               <p className="mt-3 text-sm leading-6 text-ink/70">{item.body}</p>
             </article>
@@ -113,6 +115,7 @@ export default function HomePage() {
             ["Accountable", "You keep a login, history, and renewal reminders."],
           ].map(([title, body]) => (
             <div key={title}>
+              <BrandDiamond className="mb-3 h-2.5 w-2.5 text-teal" />
               <p className="font-serif text-2xl text-navy">{title}</p>
               <p className="mt-2 text-sm leading-6 text-ink/70">{body}</p>
             </div>
