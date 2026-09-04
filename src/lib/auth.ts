@@ -4,12 +4,13 @@ import { nextCookies } from "better-auth/next-js";
 import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import * as schema from "@/db/schema";
+import { authBaseUrl, authTrustedOrigins } from "@/lib/auth-config";
 
 const adminEmail = (process.env.ADMIN_EMAIL || "hello@yriskit.co.za").toLowerCase();
 
 export const auth = betterAuth({
   secret: process.env.BETTER_AUTH_SECRET || "dev-only-change-me-in-production-32ch",
-  baseURL: process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+  baseURL: authBaseUrl(),
   database: drizzleAdapter(db, {
     provider: "sqlite",
     schema: {
@@ -51,11 +52,7 @@ export const auth = betterAuth({
     },
   },
   plugins: [nextCookies()],
-  trustedOrigins: [
-    process.env.BETTER_AUTH_URL || "http://localhost:3000",
-    process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
-    "http://localhost:3000",
-  ],
+  trustedOrigins: authTrustedOrigins(),
 });
 
 export function isAdminEmail(email: string) {
